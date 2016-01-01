@@ -20,3 +20,5 @@ Cred.sync({force: true}).then(function () {
     password: 'bun'
   });
 });
+
+module.exports = Cred;

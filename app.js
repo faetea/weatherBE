@@ -1,13 +1,12 @@
 var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
-var db = require('./db');
-
+var Cred = require("./models/Cred");
 
 // Configure the local strategy for use by Passport.
 passport.use(new Strategy(
   function (username, password, cb) {
-    db.users.findByUsername(username, function (err, user) {
+    Cred.findOne({ where: {username: username} }).then(function(user, err) {
       if (err) { return cb(err); }
       if (!user) { return cb(null, false); }
       if (user.password != password) { return cb(null, false); }
@@ -22,7 +21,7 @@ passport.serializeUser(function (user, cb) {
 });
 
 passport.deserializeUser(function (id, cb) {
-  db.users.findById(id, function (err, user) {
+  Cred.findById(id).then(function(user, err) {
     if (err) { return cb(err); }
     cb(null, user);
   });
