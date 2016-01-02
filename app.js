@@ -4,6 +4,7 @@ var Strategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt');
 
 var Cred = require("./models/Cred");
+var Weather = require("./models/Weather");
 
 // Configure the local strategy for use by Passport.
 passport.use(new Strategy(
