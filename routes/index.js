@@ -14,7 +14,7 @@ router.get('/',
 
 // router.get('/',
 //   function (req, res) {
-//     res.json({ title : (req.user && req.user.userName) || 'Nobody' });
+//     res.json({ title : (req.user && req.user.username) || 'Nobody' });
 // });
 
 router.get('/login',
@@ -31,19 +31,14 @@ router.post('/login',
 
 router.get('/logout',
   function (req, res) {
+    if(!req.user) {
+      var err = new Error("Log in first.");
+      return next(err);
+    }
     req.logout();
     res.redirect('/');
+    res.sendStatus(200);
   });
-
-// router.get('/logout',
-//   function (req, res, next) {
-//     if(!req.user) {
-//       var err = new Error("Log in first.");
-//       return next(err);
-//     }
-//     req.logout();
-//     res.sendStatus(200);
-//   });
 
 router.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
