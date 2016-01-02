@@ -1,6 +1,8 @@
 var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
+var bcrypt = require('bcrypt');
+
 var Cred = require("./models/Cred");
 
 // Configure the local strategy for use by Passport.
@@ -9,7 +11,8 @@ passport.use(new Strategy(
     Cred.findOne({ where: {username: username} }).then(function (user, err) {
       if (err) { return cb(err); }
       if (!user) { return cb(null, false); }
-      if (user.password != password) { return cb(null, false); }
+      // To check password, Load hash from your password DB
+      if (!bcrypt.compareSync(password, user.password)) { return cb(null, false); }
       return cb(null, user);
     });
   }));

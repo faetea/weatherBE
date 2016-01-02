@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var bcrypt = require('bcrypt');
 
 var Cred = require('../models/Cred');
 
@@ -52,36 +53,17 @@ router.get('/profile',
 
 router.post('/signup',
   function (req, res, next) {
-    console.log(req.body.username);
     if(!req.body || !req.body.username || !req.body.password) {
       var err = new Error("No credentials.");
       return next(err);
     }
-    console.log("HERE");
-    Cred.create({ username: req.body.username, password: req.body.password }).then(function (user, err) {
-      console.log('user: ', user);
-      console.log('err: ', err);
+    // To hash password
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(req.body.password, salt);
+    // Store hash in your password DB
+    Cred.create({ username: req.body.username, password: hash }).then(function (user, err) {
       res.sendStatus(200);
-    }).catch(function(err){
-      console.log('err: ', err);
     });
-    // var pUser = new Promise(function (res, rej) {
-    //   User.create({ username : req.body.username },
-    //   function (err, user) {
-    //     if(err) {
-    //       rej(err);
-    //       return;
-    //     }
-    //     res(user);
-    //   });
-    // });
-    // pUser.then(function (user) {
-    //   return user.setPassword(req.body.password);
-    // }).then(function() {
-    //   res.sendStatus(200);
-    // }).catch(function (err) {
-    //   next(err);
-    // });
   });
 
 // router.patch('/changePassword',
