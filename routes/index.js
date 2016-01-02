@@ -50,30 +50,39 @@ router.get('/profile',
     res.render('profile', { user: req.user });
   });
 
-// router.post('/signup',
-//   function (req, res, next) {
-//     if(!req.body || !req.body.username || !req.body.password) {
-//       var err = new Error("No credentials.");
-//       return next(err);
-//     }
-//     var pUser = new Promise(function (res, rej) {
-//       User.create({ username : req.body.username },
-//       function (err, user) {
-//         if(err) {
-//           rej(err);
-//           return;
-//         }
-//         res(user);
-//       });
-//     });
-//     pUser.then(function (user) {
-//       return user.setPassword(req.body.password);
-//     }).then(function() {
-//       res.sendStatus(200);
-//     }).catch(function (err) {
-//       next(err);
-//     });
-//   });
+router.post('/signup',
+  function (req, res, next) {
+    console.log(req.body.username);
+    if(!req.body || !req.body.username || !req.body.password) {
+      var err = new Error("No credentials.");
+      return next(err);
+    }
+    console.log("HERE");
+    Cred.create({ username: req.body.username, password: req.body.password }).then(function (user, err) {
+      console.log('user: ', user);
+      console.log('err: ', err);
+      res.sendStatus(200);
+    }).catch(function(err){
+      console.log('err: ', err);
+    });
+    // var pUser = new Promise(function (res, rej) {
+    //   User.create({ username : req.body.username },
+    //   function (err, user) {
+    //     if(err) {
+    //       rej(err);
+    //       return;
+    //     }
+    //     res(user);
+    //   });
+    // });
+    // pUser.then(function (user) {
+    //   return user.setPassword(req.body.password);
+    // }).then(function() {
+    //   res.sendStatus(200);
+    // }).catch(function (err) {
+    //   next(err);
+    // });
+  });
 
 // router.patch('/changePassword',
 //   function (req, res, next) {

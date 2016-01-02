@@ -13,12 +13,13 @@ var Cred = sequelize.define('credentials', {
   freezeTableName: true // Model tableName will be the same as the model name
 });
 
-Cred.sync({force: true}).then(function () {
+Cred.sync().then(function () {
   // Table created
-  return Cred.create({
-    username: 'Moon',
-    password: 'bun'
-  });
+  return Cred.findOrCreate({where: {username: 'Moon'}, defaults: {password: 'bun'}});
+  // return Cred.findOrCreate({
+  //   username: 'Moon',
+  //   password: 'bun'
+  // });
 });
 
 module.exports = Cred;

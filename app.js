@@ -6,7 +6,7 @@ var Cred = require("./models/Cred");
 // Configure the local strategy for use by Passport.
 passport.use(new Strategy(
   function (username, password, cb) {
-    Cred.findOne({ where: {username: username} }).then(function(user, err) {
+    Cred.findOne({ where: {username: username} }).then(function (user, err) {
       if (err) { return cb(err); }
       if (!user) { return cb(null, false); }
       if (user.password != password) { return cb(null, false); }
@@ -21,7 +21,7 @@ passport.serializeUser(function (user, cb) {
 });
 
 passport.deserializeUser(function (id, cb) {
-  Cred.findById(id).then(function(user, err) {
+  Cred.findById(id).then(function (user, err) {
     if (err) { return cb(err); }
     cb(null, user);
   });
@@ -29,7 +29,6 @@ passport.deserializeUser(function (id, cb) {
 
 
 var routes = require('./routes/index');
-console.log("are we passing routes index?");
 var users = require('./routes/users');
 
 var app = express();
@@ -45,14 +44,13 @@ app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
-
+app.use(require('body-parser').json({ extended: true }));
 
 // Initialize Passport and restore authentication state, if any, from the session.
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', routes);
-console.log("are we passing routes index no.2?");
 app.use('/users', users);
 
 
