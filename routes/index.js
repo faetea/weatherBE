@@ -56,6 +56,8 @@ router.post('/signup',
     // Store hash in your password DB
     Cred.create({ username: req.body.username, password: hash }).then(function (user, err) {
       res.sendStatus(200);
+    }).catch(function (err) {
+      next(err);
     });
   });
 
