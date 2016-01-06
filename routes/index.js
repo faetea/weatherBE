@@ -25,7 +25,6 @@ router.get('/login',
 router.post('/login',
   passport.authenticate('local', { failureRedirect: '/login' }),
   function (req, res) {
-    res.redirect('/');
     res.sendStatus(200);
   });
 
@@ -36,7 +35,6 @@ router.get('/logout',
       return next(err);
     }
     req.logout();
-    res.redirect('/');
     res.sendStatus(200);
   });
 
