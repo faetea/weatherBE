@@ -103,7 +103,7 @@ app.use(function (err, req, res, next) {
 
 var CronJob = require('cron').CronJob;
 var job = new CronJob({
-  cronTime: '00 * * * * *',
+  cronTime: '00 10 * * * *',
   onTick: function() {
     /* Runs every day, every hour, 10 mins past the hour. */
 
