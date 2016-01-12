@@ -45,6 +45,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var sync = require('./routes/sync');
 var pressure = require('./routes/pressure');
+var entries = require('./routes/entries');
 
 var app = express();
 
@@ -74,6 +75,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/sync', sync);
 app.use('/pressure', pressure);
+app.use('/entries', entries);
 
 
 // catch 404 and forward to error handler
