@@ -13,6 +13,7 @@ if (!process.env.WEATHER_ID) {
 
 var Cred = require("./models/Cred");
 var Weather = require("./models/Weather");
+var Log = require("./models/Log");
 
 // Configure the local strategy for use by Passport.
 passport.use(new Strategy(
