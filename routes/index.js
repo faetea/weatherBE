@@ -23,20 +23,20 @@ router.get('/login',
   });
 
 router.post('/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
+  passport.authenticate('local'),
   function (req, res) {
-    res.redirect('/');
     res.sendStatus(200);
   });
 
-router.get('/logout',
+router.post('/logout',
   function (req, res) {
-    if(!req.user) {
+    if(!req.session.passport.user) {
       var err = new Error("Log in first.");
       return next(err);
     }
+    req.session.destroy(function (err) {
+    });
     req.logout();
-    res.redirect('/');
     res.sendStatus(200);
   });
 
@@ -58,6 +58,8 @@ router.post('/signup',
     // Store hash in your password DB
     Cred.create({ username: req.body.username, password: hash }).then(function (user, err) {
       res.sendStatus(200);
+    }).catch(function (err) {
+      next(err);
     });
   });
 

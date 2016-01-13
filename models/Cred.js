@@ -4,6 +4,7 @@ var sequelize = require('./index');
 var Cred = sequelize.define('credentials', {
   username: {
     type: Sequelize.STRING,
+    unique: true
   },
   password: {
     type: Sequelize.STRING,
