@@ -11,7 +11,7 @@ router.get('/',
     Weather.findAll({
       where: { city_id: '4931972' },
       attributes: ['pressure', 'createdAt']
-    }).then(function(weathers) {
+    }).then(function (weathers) {
       var results = {pressures: [], createdAts: []};
       for (var i = 0; i < weathers.length; i++) {
         results.pressures.push(weathers[i].dataValues.pressure);

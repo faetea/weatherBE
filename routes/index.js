@@ -28,12 +28,14 @@ router.post('/login',
     res.sendStatus(200);
   });
 
-router.get('/logout',
+router.post('/logout',
   function (req, res) {
-    if(!req.user) {
+    if(!req.session.passport.user) {
       var err = new Error("Log in first.");
       return next(err);
     }
+    req.session.destroy(function (err) {
+    });
     req.logout();
     res.sendStatus(200);
   });

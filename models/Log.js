@@ -1,6 +1,8 @@
 var Sequelize = require('sequelize');
 var sequelize = require('./index');
 
+var Cred = require('../models/Cred');
+
 var Log = sequelize.define('log', {
   pain: {
     type: Sequelize.INTEGER
@@ -20,6 +22,8 @@ var Log = sequelize.define('log', {
 }, {
   freezeTableName: true // Model tableName will be the same as the model name
 });
+
+Log.belongsTo(Cred, {as: 'author'}); // Adds RoleId to user rather than UserRoleId
 
 Log.sync();
 
