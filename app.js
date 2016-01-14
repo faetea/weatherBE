@@ -27,7 +27,6 @@ passport.use(new Strategy(
     });
   }));
 
-
 // Configure Passport authenticated session persistence.
 passport.serializeUser(function (user, cb) {
   cb(null, user.id);
@@ -40,20 +39,11 @@ passport.deserializeUser(function (id, cb) {
   });
 });
 
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var sync = require('./routes/sync');
-var pressure = require('./routes/pressure');
-var entries = require('./routes/entries');
-
 var app = express();
-
 
 // Configure view engine to render EJS templates.
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-
 
 // Use application-level middleware for common functionality, including logging, parsing, and session handling.
 app.use(require('morgan')('combined'));
@@ -71,12 +61,12 @@ app.use(require('cors')({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', routes);
-app.use('/users', users);
-app.use('/sync', sync);
-app.use('/pressure', pressure);
-app.use('/entries', entries);
-
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
+app.use('/sync', require('./routes/sync'));
+app.use('/pressure', require('./routes/pressure'));
+app.use('/entries', require('./routes/entries'));
+app.use('/health', require('./routes/health'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -105,15 +95,14 @@ app.use(function (err, req, res, next) {
   });
 });
 
-
 var CronJob = require('cron').CronJob;
 var job = new CronJob({
   cronTime: '00 10 * * * *',
   onTick: function() {
     /* Runs every day, every hour, 10 mins past the hour. */
-
     var weatherID = process.env.WEATHER_ID;
-    http.get('http://api.openweathermap.org/data/2.5/weather?zip=02141,us&APPID=' + weatherID, function (response) {
+    var zipcode = '02141';
+    http.get('http://api.openweathermap.org/data/2.5/weather?zip='+ zipcode +',us&APPID=' + weatherID, function (response) {
       var body = '';
       response.on('data', function(d) {
         body += d;
@@ -140,12 +129,9 @@ var job = new CronJob({
     }).on('error', function(e) {
       console.log("Got error from openWeatherMapAPI call: " + e.message);
     });
-
-
   },
   start: true,
   timeZone: 'America/New_York'
 });
-
 
 module.exports = app;
