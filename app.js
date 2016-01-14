@@ -53,7 +53,7 @@ app.use(require('express-session')({ secret: process.env.SESSION_SECRET, resave:
 app.use(require('body-parser').json({ extended: true }));
 
 app.use(require('cors')({
-  origin: ['http://localhost:8080', 'null'],
+  origin: ['http://localhost:8080', 'http://faetea.github.io'],
   credentials: true
 }));
 
