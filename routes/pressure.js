@@ -27,4 +27,15 @@ router.get('/',
     });
   });
 
+// range /date?weeks=1
+router.get('/date',
+  function (req, res, next) {
+    var numWeeks = req.query.weeks;
+    var millisecondsInWeek = (7*24*3600000);
+    var todayDate = new Date(), weekDate = new Date();
+    weekDate.setTime(todayDate.getTime() - (numWeeks * millisecondsInWeek));
+    res.json(weekDate);
+  });
+
+
 module.exports = router;
