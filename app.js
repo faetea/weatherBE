@@ -95,43 +95,43 @@ app.use(function (err, req, res, next) {
   });
 });
 
-// var CronJob = require('cron').CronJob;
-// var job = new CronJob({
-//   cronTime: '00 10 * * * *',
-//   onTick: function() {
-//     /* Runs every day, every hour, 10 mins past the hour. */
-//     var weatherID = process.env.WEATHER_ID;
-//     var zipcode = '02141';
-//     http.get('http://api.openweathermap.org/data/2.5/weather?zip='+ zipcode +',us&APPID=' + weatherID, function (response) {
-//       var body = '';
-//       response.on('data', function(d) {
-//         body += d;
-//       });
-//       response.on('end', function() {
-//         var parsed = JSON.parse(body);
-//         console.log("Got response: " + response.statusCode);
-//         console.log('pressure: ' + parsed.main.pressure);
+var CronJob = require('cron').CronJob;
+var job = new CronJob({
+  cronTime: '00 10 * * * *',
+  onTick: function() {
+    /* Runs every day, every hour, 10 mins past the hour. */
+    var weatherID = process.env.WEATHER_ID;
+    var zipcode = '02141';
+    http.get('http://api.openweathermap.org/data/2.5/weather?zip='+ zipcode +',us&APPID=' + weatherID, function (response) {
+      var body = '';
+      response.on('data', function(d) {
+        body += d;
+      });
+      response.on('end', function() {
+        var parsed = JSON.parse(body);
+        console.log("Got response: " + response.statusCode);
+        console.log('pressure: ' + parsed.main.pressure);
 
-//         Weather.create({
-//           pressure: parsed.main.pressure,
-//           humidity: parsed.main.humidity,
-//           temp: parsed.main.temp,
-//           cityname: parsed.name,
-//           cityid: parsed.id,
-//           // zipcode: zipcode
-//         }).then(function (weather, err) {
-//           console.log("weather update worked");
-//         }).catch(function (err) {
-//           console.log("weather update failed: " + err);
-//         });
+        Weather.create({
+          pressure: parsed.main.pressure,
+          humidity: parsed.main.humidity,
+          temp: parsed.main.temp,
+          cityname: parsed.name,
+          cityid: parsed.id,
+          // zipcode: zipcode
+        }).then(function (weather, err) {
+          console.log("weather update worked");
+        }).catch(function (err) {
+          console.log("weather update failed: " + err);
+        });
 
-//       });
-//     }).on('error', function(e) {
-//       console.log("Got error from openWeatherMapAPI call: " + e.message);
-//     });
-//   },
-//   start: true,
-//   timeZone: 'America/New_York'
-// });
+      });
+    }).on('error', function(e) {
+      console.log("Got error from openWeatherMapAPI call: " + e.message);
+    });
+  },
+  start: true,
+  timeZone: 'America/New_York'
+});
 
 module.exports = app;
