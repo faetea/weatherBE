@@ -17,8 +17,8 @@ var Log = require("./models/Log");
 
 // Configure the local strategy for use by Passport.
 passport.use(new Strategy(
-  function (username, password, cb) {
-    Cred.findOne({ where: {username: username} }).then(function (user, err) {
+  (username, password, cb) => {
+    Cred.findOne({ where: {username: username} }).then((user, err) => {
       if (err) { return cb(err); }
       if (!user) { return cb(null, false); }
       // To check password, Load hash from your password DB
@@ -28,12 +28,12 @@ passport.use(new Strategy(
   }));
 
 // Configure Passport authenticated session persistence.
-passport.serializeUser(function (user, cb) {
+passport.serializeUser((user, cb) => {
   cb(null, user.id);
 });
 
-passport.deserializeUser(function (id, cb) {
-  Cred.findById(id).then(function (user, err) {
+passport.deserializeUser((id, cb) => {
+  Cred.findById(id).then((user, err) => {
     if (err) { return cb(err); }
     cb(null, user);
   });
@@ -49,7 +49,11 @@ app.set('view engine', 'ejs');
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
+app.use(require('express-session')({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
 app.use(require('body-parser').json({ extended: true }));
 
 app.use(require('cors')({
@@ -69,7 +73,7 @@ app.use('/entries', require('./routes/entries'));
 app.use('/health', require('./routes/health'));
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -77,7 +81,7 @@ app.use(function (req, res, next) {
 
 // development error handler, will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
+  app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -87,7 +91,7 @@ if (app.get('env') === 'development') {
 }
 
 // production error handler, no stacktraces leaked to user
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
@@ -102,12 +106,13 @@ var job = new CronJob({
     /* Runs every day, every hour, 10 mins past the hour. */
     var weatherID = process.env.WEATHER_ID;
     var zipcode = '02141';
-    http.get('http://api.openweathermap.org/data/2.5/weather?zip='+ zipcode +',us&APPID=' + weatherID, function (response) {
+    // http.get('http://api.openweathermap.org/data/2.5/weather?zip='+ zipcode +',us&APPID=' + weatherID
+    http.get(`http://api.openweathermap.org/data/2.5/weather?zip=${zipcode}us&APPID=${weatherID}`, (response) => {
       var body = '';
-      response.on('data', function(d) {
+      response.on('data', (d) => {
         body += d;
       });
-      response.on('end', function() {
+      response.on('end', () => {
         var parsed = JSON.parse(body);
         console.log("Got response: " + response.statusCode);
         console.log('pressure: ' + parsed.main.pressure);
@@ -119,14 +124,14 @@ var job = new CronJob({
           cityname: parsed.name,
           cityid: parsed.id,
           // zipcode: zipcode
-        }).then(function (weather, err) {
+        }).then((weather, err) => {
           console.log("weather update worked");
-        }).catch(function (err) {
+        }).catch((err) => {
           console.log("weather update failed: " + err);
         });
 
       });
-    }).on('error', function(e) {
+    }).on('error', (e) => {
       console.log("Got error from openWeatherMapAPI call: " + e.message);
     });
   },
