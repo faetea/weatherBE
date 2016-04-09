@@ -24,29 +24,30 @@ Run `npm start`, visit your app at [http://localhost:3000](http://localhost:3000
 
 ## ROUTES
 
-|  Verb   |  URI Pattern        |  Notes                                      |
-|---------|---------------------|---------------------------------------------|
-| POST    | `/sign-up`          | uses bcrypt to hash and salt                |
-| GET     | `/login`            | what info login expects                     |
-| POST    | `/login`            |                                             |
-| DELETE  | `/logout/:id`       | broken??                                    |
-| POST    | `/entries`          | creates new user log                        |
-| GET     | `/entries`          | show list of all current user logs          |
-| GET     | `/health`           | res w/ json for user health chart           |
-| GET     | `/pressure?weeks=1` | res w/ json for barometric pressure chart * |
+|  Verb   |  URI Pattern        |  Notes                                    |
+|---------|---------------------|-------------------------------------------|
+| POST    | `/signup`           | uses bcrypt to salt and hash              |
+| GET     | `/login`            | what info login expects                   |
+| POST    | `/login`            | passport.authenticate                     |
+| DELETE  | `/logout`           | broken??                                  |
+| POST    | `/entries`          | passport auth, user creates new log       |
+| GET     | `/entries`          | passport auth, lists all of user's logs   |
+| GET     | `/health`           | passport auth, json for user health chart |
+| GET     | `/pressure?weeks=1` | json for barometric pressure chart *      |
 
-```
+```md
 * /pressure?weeks=1 limits query by number that represents weeks
 ```
 
 ## Technologies Used
 
+-   [Passport.js](http://passportjs.org/)
 -   [Node.js](http://nodejs.org/)
 -   [Express.js](http://expressjs.com/)
 -   [Sequelize.js](http://sequelize.readthedocs.org/en/latest/)
 -   [PostgreSQL](http://www.postgresql.org/docs/9.4/static/tutorial-sql.html)
 
-## Useful Links
+## Other Useful Links
 
 -   [openWeatherMap API](http://openweathermap.org/current)
 -   [The Kick Ass Guide to Creating Nodejs Cron Tasks](http://handyjs.org/article/the-kick-ass-guide-to-creating-nodejs-cron-tasks)
